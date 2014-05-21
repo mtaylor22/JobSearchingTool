@@ -1,1 +1,26 @@
 {% extends "base.html" %}
+
+{% block content %}
+<h1>View Jobs</h1>
+<ul id="sortable">
+{% for job in jobs %}
+			<li>
+				<div class="cell"><a title="{{job.title}}" style="font-weight:bold">{{job.title}}</a></div>
+				<div class="cell"><a href="{{job.link}}" title="{{job.link}}">{{job.link}}</a></div>
+				<div class="cell"><a title="{{job.notes}}">{{job.notes}}</a></div>
+				<div class="cell"><a title="{{job.location}}">{{job.location}}</a></div>
+				<div class="cell"><a title="{{job.compensation}}">{{job.compensation}}</a></div>
+			</li>
+{% endfor %}
+			<li>
+				
+				<form style="margin:0;padding:0;" method="post" action="/addjob">
+					<div class="cell"><input type="text" placeholder="title" id="title" name="title"></div>
+					<div class="cell"><input type="text" placeholder="link" id="link" name="link"></div>
+					<div class="cell"><input type="text" placeholder="notes" id="notes" name="notes"></div>
+					<div class="cell"><input type="text" placeholder="location" id="location" name="location"></div>
+					<div class="cell"><input type="text" placeholder="compensation" id="compensation" name="compensation"><input type="submit" id="submit" name="submit"></div>
+				</form>
+			</li>
+	</ul>
+{% endblock %}

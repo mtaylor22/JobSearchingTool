@@ -1,4 +1,4 @@
-Error: {{msg}}
+{% if error %}Error: {%endif%}{{msg}}
 {% if login %}
 	<form action="/login" method="post">
 		<table>

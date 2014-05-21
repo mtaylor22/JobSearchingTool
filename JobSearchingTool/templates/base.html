@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>Job Searching Tool</title>
+		 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  
+		<style type="text/css">
+			body{
+				padding:0;
+				margin:0;
+			}
+			input, textarea{
+				outline: none;
+				height:20px;
+			}
+			#sortable {
+				list-style-type: none;
+				 margin: 0;
+				 padding: 0;
+				 width: 100%;
+			}
+			#sortable li {
+				font-size: 18px; 
+				height: 30px; 
+				line-height:30px;
+			}
+			#sortable li span {
+				position: absolute; 
+				margin-left: -1.3em; 
+			}
+			.cell{
+				width:19%;
+				padding-left:5px;
+				overflow-x: hidden;
+				overflow-y: hidden;
+				float:left;
+				white-space:nowrap;
+				height:30px;
+				line-height:30px;
+				vertical-align:middle;
+			}
+			li:nth-child(odd){
+				background-color:#CCC;
+			}
+			li:nth-child(even){
+				background-color:#EEE;
+			}
+			li:hover{
+				background-color:#AAA;
+			}
+			input {
+				width:100%;
+				vertical-align:middle;
+				margin-top:5px;
+			}
+			input[type=submit], input[id=compensation]{
+				width:45%;
+			}
+			input[type=submit]{
+				margin-left:10%;
+			}
+
+		</style>
+		<script>
+			$(function() {
+			$("#sortable").sortable();
+			$("#sortable").disableSelection();
+    			$( document ).tooltip();
+			});
+			//http://stackoverflow.com/questions/15633341/jquery-ui-sortable-then-write-order-into-a-database
+		</script>
+	</head>
+	<body>
+		{% block content %}
+		{% endblock %}
+		
+	</body>
+</html>
