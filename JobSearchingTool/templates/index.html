@@ -4,12 +4,32 @@
 <h1>View Jobs</h1>
 <ul id="sortable">
 {% for job in jobs %}
-			<li>
-				<div class="cell"><a title="{{job.title}}" style="font-weight:bold">{{job.title}}</a></div>
-				<div class="cell"><a href="{{job.link}}" title="{{job.link}}">{{job.link}}</a></div>
-				<div class="cell"><a title="{{job.notes}}">{{job.notes}}</a></div>
-				<div class="cell"><a title="{{job.location}}">{{job.location}}</a></div>
-				<div class="cell"><a title="{{job.compensation}}">{{job.compensation}}</a></div>
+			<li id="list_{{job.1}}" name="list_{{job.1}}">
+				<div class="cell" id="cell_title_{{job.1}}" name="cell_title_{{job.1}}" 
+					onclick="clickset('{{job.1}}', 'title', '{{job.0.title}}');">
+						<a id="title_{{job.1}}" title="{{job.0.title}}" style="font-weight:bold">{{job.0.title}}</a>
+				</div>
+				<input type="hidden" id="title_set_{{job.1}}" value="0">
+				<div class="cell" id="cell_link_{{job.1}}" name="cell_link_{{job.1}}" 
+					onclick="clickset('{{job.1}}', 'link', '{{job.0.link}}');">
+						<a id="link_{{job.1}}" href="{{job.0.link}}" title="{{job.0.link}}">{{job.0.link}}</a>
+				</div>
+				<input type="hidden" id="link_set_{{job.1}}" value="0">
+				<div class="cell" id="cell_notes_{{job.1}}" name="cell_notes_{{job.1}}" 
+					onclick="clickset('{{job.1}}', 'notes', '{{job.0.notes}}');">
+						<a id="notes_{{job.1}}" title="{{job.0.notes}}">{{job.0.notes}}</a>
+				</div>
+				<input type="hidden" id="notes_set_{{job.1}}" value="0">
+				<div class="cell" id="cell_location_{{job.1}}" name="cell_location_{{job.1}}" 
+					onclick="clickset('{{job.1}}', 'location', '{{job.0.location}}');">
+						<a id="location_{{job.1}}" title="{{job.0.location}}">{{job.0.location}}</a>
+				</div>
+				<input type="hidden" id="location_set_{{job.1}}" value="0">
+				<div class="cell" id="cell_compensation_{{job.1}}" name="cell_compensation_{{job.1}}" 
+					onclick="clickset('{{job.1}}', 'compensation', '{{job.0.compensation}}');">
+						<a id="compensation_{{job.1}}" title="{{job.0.compensation}}">{{job.0.compensation}}</a>
+				</div>
+				<input type="hidden" id="compensation_set_{{job.1}}" value="0">
 			</li>
 {% endfor %}
 			<li>
@@ -23,4 +43,59 @@
 				</form>
 			</li>
 	</ul>
+	<script type="text/javascript">
+	function clickset(id, type, value){
+		if ($('#' + type + '_set_' + id).val() == 0 ){
+			$('#cell_' + type + '_' + id).html('<input onblur="update()" id="text_' + type + '_' + id + '" name="text_' + type + '_' + id + '" value="' + value + '">');
+			$('#' + type + '_set_' + id).val('1');
+			$('#text_' + type + '_' + id).select();
+		}
+	}
+
+	function update(){
+		var action = false; 
+	{% for job in jobs %}
+		if ($('#title_set_{{job.1}}').val() == "1"){
+			action = true;
+			$('#title_set_{{job.1}}').val("0");
+			$.post('/action', {'action': 'modify', 'id': '{{job.1}}', 'param': 'title', 'value': $('#text_title_{{job.1}}').val()});
+			$('#cell_title_{{job.1}}').html($('#text_title_{{job.1}}').val());
+		} 
+		if ($('#link_set_{{job.1}}').val() == "1"){
+			action = true;
+			$('#link_set_{{job.1}}').val("0");
+			$.post('/action', {'action': 'modify', 'id': '{{job.1}}', 'param': 'link', 'value': $('#text_link_{{job.1}}').val()});
+			$('#cell_link_{{job.1}}').html($('#text_link_{{job.1}}').val());
+		} 
+		if ($('#notes_set_{{job.1}}').val() == "1"){
+			action = true;
+			$('#notes_set_{{job.1}}').val("0");
+			$.post('/action', {'action': 'modify', 'id': '{{job.1}}', 'param': 'notes', 'value': $('#text_notes_{{job.1}}').val()});
+			$('#cell_notes_{{job.1}}').html($('#text_notes_{{job.1}}').val());
+		} 
+		if ($('#location_set_{{job.1}}').val() == "1"){
+			action = true;
+			$('#location_set_{{job.1}}').val("0");
+			$.post('/action', {'action': 'modify', 'id': '{{job.1}}', 'param': 'location', 'value': $('#text_location_{{job.1}}').val()});
+			$('#cell_location_{{job.1}}').html($('#text_location_{{job.1}}').val());
+		} 
+		if ($('#compensation_set_{{job.1}}').val() == "1"){
+			action = true;
+			$('#compensation_set_{{job.1}}').val("0");
+			$.post('/action', {'action': 'modify', 'id': '{{job.1}}', 'param': 'compensation', 'value': $('#text_compensation_{{job.1}}').val()});
+			$('#cell_compensation_{{job.1}}').html($('#text_compensation_{{job.1}}').val());
+		} 
+		{% endfor %}
+		if (action) $('#updated').slideDown('fast', function(){
+			setTimeout(function(){
+				$('#updated').slideUp('fast');
+				action = false;
+			}, 1000);
+		})
+			
+	}
+	</script>
+	<div id="updated" name="updated" style="display:none; background-color:lightgreen; height:30px; width:100%; line-height:30px;font-weight:bold; padding-left:10px; color:#444">
+		Successfully Updated
+	</div>
 {% endblock %}

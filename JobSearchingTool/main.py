@@ -58,8 +58,22 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
 	def get(self):
-		jobs = db.GqlQuery("SELECT * FROM Job WHERE user = '" + self.session['user'] + "'")
-		self.render_restricted_template('index.html', {'jobs': jobs})
+		jobs = db.GqlQuery("SELECT * FROM Job WHERE user =:username", username=self.session['user'])
+		jobs_wid = []
+		for job in jobs:
+			jobs_wid.append([job, job.key().id()])
+		self.render_restricted_template('index.html', {'jobs': jobs_wid})
+
+class ActionHandler(BaseHandler):
+	def get(self):
+		self.render_restricted_template('index.html', {})
+	def post(self):
+		#modify param value
+		if self.request.get('action') == 'modify' and self.request.get('id') and self.request.get('param') and self.request.get('value'):
+			job = Job.get_by_id(int(self.request.get('id')))
+			setattr(job, self.request.get('param'), self.request.get('value'))
+			job.put()
+		self.render_restricted_template('index.html', {})
 
 class AddJobHandler(BaseHandler):
 	def get(self):
@@ -97,5 +111,6 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name='home'),
     webapp2.Route('/login', LoginHandler, name='login'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
+    webapp2.Route('/action', ActionHandler, name='action'),
     webapp2.Route('/addjob', AddJobHandler, name='addjob')
 ], config=config, debug=True)
