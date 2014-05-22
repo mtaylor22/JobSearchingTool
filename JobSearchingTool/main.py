@@ -73,6 +73,9 @@ class ActionHandler(BaseHandler):
 			job = Job.get_by_id(int(self.request.get('id')))
 			setattr(job, self.request.get('param'), self.request.get('value'))
 			job.put()
+		elif self.request.get('action') == 'delete' and self.request.get('id'):
+			job = Job.get_by_id(int(self.request.get('id')))
+			job.delete()
 		self.render_restricted_template('index.html', {})
 
 class AddJobHandler(BaseHandler):

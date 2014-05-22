@@ -25,9 +25,12 @@
 						<a id="location_{{job.1}}" title="{{job.0.location}}">{{job.0.location}}</a>
 				</div>
 				<input type="hidden" id="location_set_{{job.1}}" value="0">
-				<div class="cell" id="cell_compensation_{{job.1}}" name="cell_compensation_{{job.1}}" 
+				<div class="cell halfcell" id="cell_compensation_{{job.1}}" name="cell_compensation_{{job.1}}" 
 					onclick="clickset('{{job.1}}', 'compensation', '{{job.0.compensation}}');">
 						<a id="compensation_{{job.1}}" title="{{job.0.compensation}}">{{job.0.compensation}}</a>
+				</div>
+				<div class="cell halfcell">
+						<input type="button" onclick="delitem('{{job.1}}')" value="delete">
 				</div>
 				<input type="hidden" id="compensation_set_{{job.1}}" value="0">
 			</li>
@@ -92,6 +95,11 @@
 				action = false;
 			}, 1000);
 		})
+			
+	}
+	function delitem(id){
+		$.post('/action', {'action': 'delete', 'id': id});
+		$('#list_'+id).remove()
 			
 	}
 	</script>
